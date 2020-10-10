@@ -15,7 +15,7 @@
 <meta property="og:description" content="App 启动时都干了些什么事儿？ 冷启动是指， App 点击启动前，它的进程不在系统里，需要系统新创建一个进程分配给它启动的情况。这是一次完整的启动过程。 热启动是指 ，App 在冷启动后用户将 App 退后台，在 App 的进程还在系统里的情况下，用户重新启动进入 App 的过程，这个过程做的事情非常少。  一般而言，App 的启动时间，指的是从用户点击 App 开始，到用户看到第一个界面之间的">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2020-10-09T09:46:56.182Z">
-<meta property="article:modified_time" content="2020-10-09T10:27:27.247Z">
+<meta property="article:modified_time" content="2020-10-10T01:14:12.840Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
   
@@ -103,12 +103,33 @@
 <li>Objc 运行时的初始处理，包括 Objc 相关类的注册、category 注册、selector 唯一性检查等；</li>
 <li>初始化，包括了执行 +load() 方法、attribute((constructor)) 修饰的函数的调用、创建 C++ 静态全局变量。</li>
 </ul>
-<p>下面，我针对 fishhook 里的关键代码，和你具体说下 fishhook 的实现原理。</p>
-<h3 id="首先，遍历-dyld-里的所有-image，取出-image-header-和-slide。代码如下："><a href="#首先，遍历-dyld-里的所有-image，取出-image-header-和-slide。代码如下：" class="headerlink" title="首先，遍历 dyld 里的所有 image，取出 image header 和 slide。代码如下："></a>首先，遍历 dyld 里的所有 image，取出 image header 和 slide。代码如下：</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">if</span> (!_rebindings_head-&gt;next) &#123;</span><br><span class="line">    _dyld_register_func_for_add_image(_rebind_symbols_for_image);</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    uint32_t c = _dyld_image_count();</span><br><span class="line">    // 遍历所有 image</span><br><span class="line">    <span class="keyword">for</span> (uint32_t i = 0; i &lt; c; i++) &#123;</span><br><span class="line">        // 读取 image header 和 slider</span><br><span class="line">        _rebind_symbols_for_image(_dyld_get_image_header(i), _dyld_get_image_vmaddr_slide(i));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>相应地，这个阶段对于启动速度优化来说，可以做的事情包括：</p>
+<ul>
+<li>减少动态库加载。每个库本身都有依赖关系，苹果公司建议使用更少的动态库，并且建议在使用动态库的数量较多时，尽量将多个动态库进行合并。数量上，苹果公司建议最多使用 6 个非系统动态库。</li>
+<li>减少加载启动后不会去使用的类或者方法。</li>
+<li>+load() 方法里的内容可以放到首屏渲染完成后再执行，或使用 +initialize() 方法替换掉。因为，在一个 +load() 方法里，进行运行时方法替换操作会带来 4 毫秒的消耗。不要小看这 4 毫秒，积少成多，执行 +load() 方法对启动速度的影响会越来越大。</li>
+<li>控制 C++ 全局变量的数量。</li>
+</ul>
+<h3 id="main-函数执行后"><a href="#main-函数执行后" class="headerlink" title="main() 函数执行后"></a>main() 函数执行后</h3><p>main() 函数执行后的阶段，指的是从 main() 函数执行开始，到 appDelegate 的 didFinishLaunchingWithOptions 方法里首屏渲染相关方法执行完成。</p>
+<ul>
+<li>首屏初始化所需配置文件的读写操作；</li>
+<li>首屏列表大数据的读取；</li>
+<li>首屏渲染的大量计算等。</li>
+</ul>
+<p>很多时候，开发者会把各种初始化工作都放到这个阶段执行，导致渲染完成滞后。更加优化的开发方式，应该是从功能上梳理出哪些是首屏渲染必要的初始化功能，哪些是 App 启动必要的初始化功能，而哪些是只需要在对应功能开始使用时才需要初始化的。梳理完之后，将这些初始化功能分别放到合适的阶段进行。</p>
+<p>目前来看，对 App 启动速度的监控，主要有两种手段。</p>
+<h4 id="第一种方法是，定时抓取主线程上的方法调用堆栈，计算一段时间里各个方法的耗时。"><a href="#第一种方法是，定时抓取主线程上的方法调用堆栈，计算一段时间里各个方法的耗时。" class="headerlink" title="第一种方法是，定时抓取主线程上的方法调用堆栈，计算一段时间里各个方法的耗时。"></a>第一种方法是，定时抓取主线程上的方法调用堆栈，计算一段时间里各个方法的耗时。</h4><p>这个定时间隔如果小于所有方法执行的时间（比如 0.002 秒），那么基本就能监控到所有方法。但这样做的话，整体的耗时时间就不够准确。一般将这个定时间隔设置为 0.01 秒。这样设置，对整体耗时的影响小，不过很多方法耗时就不精确了。但因为整体耗时的数据更加重要些，单个方法耗时精度不高也是可以接受的，所以这个设置也是没问题的。</p>
+<h4 id="第二种方法是，对-objc-msgSend-方法进行-hook-来掌握所有方法的执行耗时。"><a href="#第二种方法是，对-objc-msgSend-方法进行-hook-来掌握所有方法的执行耗时。" class="headerlink" title="第二种方法是，对 objc_msgSend 方法进行 hook 来掌握所有方法的执行耗时。"></a>第二种方法是，对 objc_msgSend 方法进行 hook 来掌握所有方法的执行耗时。</h4><p>hook 方法的意思是，在原方法开始执行时换成执行其他你指定的方法，或者在原有方法执行前后执行你指定的方法，来达到掌握和改变指定方法的目的。</p>
+<p>hook objc_msgSend 这种方式的优点是非常精确，而缺点是只能针对 Objective-C 的方法。当然，对于 c 方法和 block 也不是没有办法，你可以使用 libffi 的 ffi_call 来达成 hook，但缺点就是编写维护相关工具门槛高。</p>
+<p>关于，libffi 相关的内容，我会在后面的第 35 篇文章“libffi：动态调用和定义 C 函数”里和你详细说明。</p>
+<p>综上，如果对于检查结果精准度要求高的话，我比较推荐你使用 hook objc_msgSend 方式来检查启动方法的执行耗时。</p>
+<h3 id="下面，我针对-fishhook-里的关键代码，和你具体说下-fishhook-的实现原理。"><a href="#下面，我针对-fishhook-里的关键代码，和你具体说下-fishhook-的实现原理。" class="headerlink" title="下面，我针对 fishhook 里的关键代码，和你具体说下 fishhook 的实现原理。"></a>下面，我针对 fishhook 里的关键代码，和你具体说下 fishhook 的实现原理。</h3><p>首先，遍历 dyld 里的所有 image，取出 image header 和 slide。代码如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">if</span> (!_rebindings_head-&gt;next) &#123;</span><br><span class="line">    _dyld_register_func_for_add_image(_rebind_symbols_for_image);</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    uint32_t c = _dyld_image_count();</span><br><span class="line">    // 遍历所有 image</span><br><span class="line">    <span class="keyword">for</span> (uint32_t i = 0; i &lt; c; i++) &#123;</span><br><span class="line">        // 读取 image header 和 slider</span><br><span class="line">        _rebind_symbols_for_image(_dyld_get_image_header(i), _dyld_get_image_vmaddr_slide(i));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
 
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">segment_command_t *cur_seg_cmd;</span><br><span class="line">segment_command_t *linkedit_segment = NULL;</span><br><span class="line">struct symtab_command* symtab_cmd = NULL;</span><br><span class="line">struct dysymtab_command* dysymtab_cmd = NULL;</span><br><span class="line">uintptr_t cur = (uintptr_t)header + sizeof(mach_header_t);</span><br><span class="line"><span class="keyword">for</span> (uint i = 0; i &lt; header-&gt;ncmds; i++, cur += cur_seg_cmd-&gt;cmdsize) &#123;</span><br><span class="line">    cur_seg_cmd = (segment_command_t *)cur;</span><br><span class="line">    <span class="keyword">if</span> (cur_seg_cmd-&gt;cmd == LC_SEGMENT_ARCH_DEPENDENT) &#123;</span><br><span class="line">        <span class="keyword">if</span> (strcmp(cur_seg_cmd-&gt;segname, SEG_LINKEDIT) == 0) &#123;</span><br><span class="line">            // linkedit segment <span class="built_in">command</span></span><br><span class="line">            linkedit_segment = cur_seg_cmd;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (cur_seg_cmd-&gt;cmd == LC_SYMTAB) &#123;</span><br><span class="line">        // symtab <span class="built_in">command</span></span><br><span class="line">        symtab_cmd = (struct symtab_command*)cur_seg_cmd;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (cur_seg_cmd-&gt;cmd == LC_DYSYMTAB) &#123;</span><br><span class="line">        // dysymtab <span class="built_in">command</span></span><br><span class="line">        dysymtab_cmd = (struct dysymtab_command*)cur_seg_cmd;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>接下来，找到符号表相关的 command，包括 linkedit segment command、symtab command 和 dysymtab command。代码如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">segment_command_t *cur_seg_cmd;</span><br><span class="line">segment_command_t *linkedit_segment = NULL;</span><br><span class="line">struct symtab_command* symtab_cmd = NULL;</span><br><span class="line">struct dysymtab_command* dysymtab_cmd = NULL;</span><br><span class="line">uintptr_t cur = (uintptr_t)header + sizeof(mach_header_t);</span><br><span class="line"><span class="keyword">for</span> (uint i = 0; i &lt; header-&gt;ncmds; i++, cur += cur_seg_cmd-&gt;cmdsize) &#123;</span><br><span class="line">    cur_seg_cmd = (segment_command_t *)cur;</span><br><span class="line">    <span class="keyword">if</span> (cur_seg_cmd-&gt;cmd == LC_SEGMENT_ARCH_DEPENDENT) &#123;</span><br><span class="line">        <span class="keyword">if</span> (strcmp(cur_seg_cmd-&gt;segname, SEG_LINKEDIT) == 0) &#123;</span><br><span class="line">            // linkedit segment <span class="built_in">command</span></span><br><span class="line">            linkedit_segment = cur_seg_cmd;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (cur_seg_cmd-&gt;cmd == LC_SYMTAB) &#123;</span><br><span class="line">        // symtab <span class="built_in">command</span></span><br><span class="line">        symtab_cmd = (struct symtab_command*)cur_seg_cmd;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (cur_seg_cmd-&gt;cmd == LC_DYSYMTAB) &#123;</span><br><span class="line">        // dysymtab <span class="built_in">command</span></span><br><span class="line">        dysymtab_cmd = (struct dysymtab_command*)cur_seg_cmd;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 
 
@@ -122,6 +143,20 @@
   </div>
   
     
+<nav id="article-nav">
+  
+    <a href="/2020/10/10/App%20%E5%A6%82%E4%BD%95%E5%8A%A0%E8%BD%BD?/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          如何加载？
+        
+      </div>
+    </a>
+  
+  
+</nav>
+
   
 </article>
 
@@ -152,6 +187,10 @@
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2020/10/10/App%20%E5%A6%82%E4%BD%95%E5%8A%A0%E8%BD%BD?/">如何加载？</a>
+          </li>
         
           <li>
             <a href="/2020/10/09/App%20%E5%90%AF%E5%8A%A8%E9%80%9F%E5%BA%A6%E4%BC%98%E5%8C%96%E4%B8%8E%E7%9B%91%E6%8E%A7/">App 启动速度优化与监控</a>
