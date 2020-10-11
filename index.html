@@ -64,6 +64,51 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-YKWoodpecker啄木鸟" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/10/11/YKWoodpecker%E5%95%84%E6%9C%A8%E9%B8%9F/" class="article-date">
+  <time datetime="2020-10-11T00:06:30.000Z" itemprop="datePublished">2020-10-11</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/10/11/YKWoodpecker%E5%95%84%E6%9C%A8%E9%B8%9F/">YKWoodpecker啄木鸟</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>啄幕鸟，即手机屏幕上的啄木鸟，专抓App里的Bug。啄幕鸟集合了UI检查、对象查看、方法监听等多种开发工具，通过拾取UI控件、查看对象属性、监听方法调用、App内抓包等，不依赖电脑联调，直接获取运行时数据，快速定位Bug，提高开发效率。啄幕鸟提供了插件化的工具平台，简便易用，零侵入、零依赖、易接入、易扩展。</p>
+<h1 id="功能简介"><a href="#功能简介" class="headerlink" title="功能简介"></a>功能简介</h1><p>1.UI检查：快速查看页面布局、UI控件间距、字体颜色、UI控件类名、对象属性/成员变量、图片URL等。<br>2.JSON抓包：便捷JSON抓包工具，通过监听系统json解析抓包。<br>3.方法监听：Bug听诊器，可监听App中任意OC方法的调用，输出调用参数、返回值等信息，可以通过屏幕日志输入监听、KVC取值等命令，支持后台配置命令。<br>4.po命令：执行类似LLDB的po命令，在App运行时执行po命令，调用任意方法。<br>5.系统信息：查看各种系统名称、版本、屏幕、UA等信息，支持外部添加信息。<br>6.SandBox：查看沙盒文件，导出文件等。<br>7.Bundle：查看、导出Bundle目录中的内容。<br>8.Crash：查看Crash日志，需先打开一次Crash插件以开启Crash监控。<br>9.Defaults：查看、新增、删除User Defaults。<br>10.清除数据：清除所有沙盒数据、User Default。<br>11.触点显示：显示手指触控。<br>12.UI对比：支持将设计图导入到App中进行对比，并可画线、标注需修改的地方，方便UI走查。<br>13.查看图片资源：查看、导出App中的资源图片。<br>14.CPU：查看CPU占用。<br>15.内存：查看内存占用。<br>16.FPS：查看App帧率。<br>17.网络流量：查看发送、接收网络流量。</p>
+<h1 id="接入"><a href="#接入" class="headerlink" title="接入"></a>接入</h1><p>支持iOS 8.0及以上。<br>Pod接入：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pod  &#39;YKWoodpecker&#39;  </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>打开啄幕鸟：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#import &quot;YKWoodpecker.h&quot;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 显示啄幕鸟，启动默认打开UI检查插件</span><br><span class="line">[[YKWoodpeckerManager shareInstance] show];</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>更多参见工程README，Github地址：<a target="_blank" rel="noopener" href="https://github.com/alibaba/youku-sdk-tool-woodpecker">https://github.com/alibaba/youku-sdk-tool-woodpecker</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2020/10/11/YKWoodpecker%E5%95%84%E6%9C%A8%E9%B8%9F/" data-id="ckg4csmk90000p99lhu6tbku8" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-PCM音频基础" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2020/10/10/PCM%E9%9F%B3%E9%A2%91%E5%9F%BA%E7%A1%80/" class="article-date">
@@ -177,57 +222,6 @@
 
 
   
-    <article id="post-runloop监控iOS卡顿" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/10/10/runloop%E7%9B%91%E6%8E%A7iOS%E5%8D%A1%E9%A1%BF/" class="article-date">
-  <time datetime="2020-10-10T07:16:51.000Z" itemprop="datePublished">2020-10-10</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/10/10/runloop%E7%9B%91%E6%8E%A7iOS%E5%8D%A1%E9%A1%BF/">runloop监控iOS卡顿</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>主要思路:通过监测Runloop的kCFRunLoopAfterWaiting，用一个子线程去检查，一次循环是否时间太长。<br>其中主要涉及到了runloop的原理。关于整个原理：<a target="_blank" rel="noopener" href="https://link.jianshu.com/?t=http://blog.ibireme.com/2015/05/18/runloop/">深入理解RunLoop</a>讲解的比较仔细。<br>以下就是runloop大概的运行方式</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">    /// 1. 通知Observers，即将进入RunLoop</span><br><span class="line">    /// 此处有Observer会创建AutoreleasePool: _objc_autoreleasePoolPush();</span><br><span class="line">    __CFRUNLOOP_IS_CALLING_OUT_TO_AN_OBSERVER_CALLBACK_FUNCTION__(kCFRunLoopEntry);</span><br><span class="line">    <span class="keyword">do</span> &#123;</span><br><span class="line"> </span><br><span class="line">        /// 2. 通知 Observers: 即将触发 Timer 回调。</span><br><span class="line">        __CFRUNLOOP_IS_CALLING_OUT_TO_AN_OBSERVER_CALLBACK_FUNCTION__(kCFRunLoopBeforeTimers);</span><br><span class="line">        /// 3. 通知 Observers: 即将触发 Source (非基于port的,Source0) 回调。</span><br><span class="line">        __CFRUNLOOP_IS_CALLING_OUT_TO_AN_OBSERVER_CALLBACK_FUNCTION__(kCFRunLoopBeforeSources);</span><br><span class="line">        __CFRUNLOOP_IS_CALLING_OUT_TO_A_BLOCK__(block);</span><br><span class="line"> </span><br><span class="line">        /// 4. 触发 Source0 (非基于port的) 回调。</span><br><span class="line">        __CFRUNLOOP_IS_CALLING_OUT_TO_A_SOURCE0_PERFORM_FUNCTION__(source0);</span><br><span class="line"></span><br><span class="line">        /// 5. GCD处理main block</span><br><span class="line">        __CFRUNLOOP_IS_CALLING_OUT_TO_A_BLOCK__(block);</span><br><span class="line"> </span><br><span class="line">        /// 6. 通知Observers，即将进入休眠</span><br><span class="line">        /// 此处有Observer释放并新建AutoreleasePool: _objc_autoreleasePoolPop(); _objc_autoreleasePoolPush();</span><br><span class="line">        __CFRUNLOOP_IS_CALLING_OUT_TO_AN_OBSERVER_CALLBACK_FUNCTION__(kCFRunLoopBeforeWaiting);</span><br><span class="line"> </span><br><span class="line">        /// 7. sleep to <span class="built_in">wait</span> msg.</span><br><span class="line">        mach_msg() -&gt; mach_msg_trap();</span><br><span class="line">        </span><br><span class="line"> </span><br><span class="line">        /// 8. 通知Observers，线程被唤醒</span><br><span class="line">        __CFRUNLOOP_IS_CALLING_OUT_TO_AN_OBSERVER_CALLBACK_FUNCTION__(kCFRunLoopAfterWaiting);</span><br><span class="line"> </span><br><span class="line">        /// 9. 如果是被Timer唤醒的，回调Timer</span><br><span class="line">        __CFRUNLOOP_IS_CALLING_OUT_TO_A_TIMER_CALLBACK_FUNCTION__(timer);</span><br><span class="line"> </span><br><span class="line">        /// 9. 如果是被dispatch唤醒的，执行所有调用 dispatch_async 等方法放入main queue 的 block</span><br><span class="line">        __CFRUNLOOP_IS_SERVICING_THE_MAIN_DISPATCH_QUEUE__(dispatched_block);</span><br><span class="line"> </span><br><span class="line">        /// 9. 如果如果Runloop是被 Source1 (基于port的) 的事件唤醒了，处理这个事件</span><br><span class="line">        __CFRUNLOOP_IS_CALLING_OUT_TO_A_SOURCE1_PERFORM_FUNCTION__(source1);</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">    &#125; <span class="keyword">while</span> (...);</span><br><span class="line"> </span><br><span class="line">    /// 10. 通知Observers，即将退出RunLoop</span><br><span class="line">    /// 此处有Observer释放AutoreleasePool: _objc_autoreleasePoolPop();</span><br><span class="line">    __CFRUNLOOP_IS_CALLING_OUT_TO_AN_OBSERVER_CALLBACK_FUNCTION__(kCFRunLoopExit);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line">static void runLoopObserverCallBack(CFRunLoopObserverRef observer, CFRunLoopActivity activity, void *info)</span><br><span class="line">&#123;</span><br><span class="line">    SeMonitorController *instrance &#x3D; [SeMonitorController sharedInstance];</span><br><span class="line">    instrance-&gt;_activity &#x3D; activity;</span><br><span class="line">    &#x2F;&#x2F; 发送信号</span><br><span class="line">    dispatch_semaphore_t semaphore &#x3D; instrance-&gt;_semaphore;</span><br><span class="line">    dispatch_semaphore_signal(semaphore);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)registerObserver</span><br><span class="line">&#123;</span><br><span class="line">    CFRunLoopObserverContext context &#x3D; &#123;0,(__bridge void*)self,NULL,NULL&#125;;</span><br><span class="line">    _observer &#x3D; CFRunLoopObserverCreate(kCFAllocatorDefault,</span><br><span class="line">                                                            kCFRunLoopAllActivities,</span><br><span class="line">                                                            YES,</span><br><span class="line">                                                            0,</span><br><span class="line">                                                            &amp;runLoopObserverCallBack,</span><br><span class="line">                                                            &amp;context);</span><br><span class="line">    CFRunLoopAddObserver(CFRunLoopGetMain(), _observer, kCFRunLoopCommonModes);</span><br><span class="line">    </span><br><span class="line">    &#x2F;&#x2F; 创建信号</span><br><span class="line">    _semaphore &#x3D; dispatch_semaphore_create(0);</span><br><span class="line">    </span><br><span class="line">    &#x2F;&#x2F; 在子线程监控时长</span><br><span class="line">    dispatch_async(dispatch_get_global_queue(0, 0), ^&#123;</span><br><span class="line">        while (YES)</span><br><span class="line">        &#123;</span><br><span class="line">            &#x2F;&#x2F; 假定连续5次超时50ms认为卡顿(当然也包含了单次超时250ms)</span><br><span class="line">            long st &#x3D; dispatch_semaphore_wait(_semaphore, dispatch_time(DISPATCH_TIME_NOW, 50*NSEC_PER_MSEC));</span><br><span class="line">            if (st !&#x3D; 0)</span><br><span class="line">            &#123;</span><br><span class="line">                if (_activity&#x3D;&#x3D;kCFRunLoopBeforeSources || _activity&#x3D;&#x3D;kCFRunLoopAfterWaiting)</span><br><span class="line">                &#123;</span><br><span class="line">                    if (++_countTime &lt; 5)</span><br><span class="line">                        continue;</span><br><span class="line">                    [self logStack];</span><br><span class="line">                    NSLog(@&quot;something lag&quot;);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            _countTime &#x3D; 0;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)logStack&#123;</span><br><span class="line">    void* callstack[128];</span><br><span class="line">    int frames &#x3D; backtrace(callstack, 128);</span><br><span class="line">    char **strs &#x3D; backtrace_symbols(callstack, frames);</span><br><span class="line">    int i;</span><br><span class="line">    _backtrace &#x3D; [NSMutableArray arrayWithCapacity:frames];</span><br><span class="line">    for ( i &#x3D; 0 ; i &lt; frames ; i++ )&#123;</span><br><span class="line">        [_backtrace addObject:[NSString stringWithUTF8String:strs[i]]];</span><br><span class="line">    &#125;</span><br><span class="line">    free(strs);</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<p>主要内容是首先在主线程注册了runloop observer的回调<code>myRunLoopObserver</code><br>每次小循环都会记录一下<code>kCFRunLoopAfterWaiting</code>的时间<code>_waitStartTime</code>，并且在<code>kCFRunLoopBeforeWaiting</code>制空。</p>
-<p>另外开了一个子线程并开启他的runloop（模仿了AFNetworking的方式），并加上一个timer每隔1秒去进行监测。</p>
-<p>如果当前时长与<code>_waitStartTime</code>差距大于2秒，则认为有卡顿情况，并记录了当前堆栈信息。</p>
-<p>PS:整个demo写的比较简单，最后获取堆栈也仅获取了当前线程的堆栈信息(<code>[NSThread callStackSymbols]</code>有同样效果)，也在寻找获取所有线程堆栈的方法，欢迎指点一下。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://example.com/2020/10/10/runloop%E7%9B%91%E6%8E%A7iOS%E5%8D%A1%E9%A1%BF/" data-id="ckg3e9lxh0000o19la6cobabc" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
 
 
   <nav id="page-nav">
@@ -264,6 +258,10 @@
       <ul>
         
           <li>
+            <a href="/2020/10/11/YKWoodpecker%E5%95%84%E6%9C%A8%E9%B8%9F/">YKWoodpecker啄木鸟</a>
+          </li>
+        
+          <li>
             <a href="/2020/10/10/PCM%E9%9F%B3%E9%A2%91%E5%9F%BA%E7%A1%80/">PCM音频基础</a>
           </li>
         
@@ -277,10 +275,6 @@
         
           <li>
             <a href="/2020/10/10/%E5%A6%82%E4%BD%95%E4%BB%8E%E8%B5%84%E6%BA%90%E5%92%8C%E4%BB%A3%E7%A0%81%E5%B1%82%E9%9D%A2%E5%AE%9E%E7%8E%B0%E5%85%A8%E6%96%B9%E4%BD%8D%E7%98%A6%E8%BA%AB/">如何从资源和代码层面实现全方位瘦身</a>
-          </li>
-        
-          <li>
-            <a href="/2020/10/10/%E6%9E%B6%E6%9E%84%E6%80%8E%E4%B9%88%E8%AE%BE%E8%AE%A1%E6%9B%B4%E5%90%88%E7%90%86/">架构怎么设计更合理</a>
           </li>
         
       </ul>
